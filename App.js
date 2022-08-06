@@ -14,7 +14,7 @@ import GoalItem from "./components/GoalItem/GoalItem";
 
 export default function App() {
   const [goals, setGoals] = useState([]);
-
+  const [showModal, setShowModal] = useState(false);
   const addGoalHandler = (goal) => {
     setGoals((currentGoals) => [
       ...currentGoals,
@@ -27,30 +27,43 @@ export default function App() {
     );
   };
   return (
-    <View style={styles.container}>
-      <GoalInput submit={addGoalHandler} />
-      <View style={styles.goalsContainer}>
-        <FlatList
-          data={goals}
-          keyExtractor={(itemData, index) => itemData.id}
-          renderItem={(itemData) => (
-            <GoalItem onDelete={DeleteGoal} goal={itemData.item} />
-          )}
-          alwaysBounceVertical={false}
+    <>
+      <StatusBar style="light" />
+      <View style={styles.container}>
+        <Button
+          color={"#a065ec"}
+          title="Add Goals"
+          onPress={() => setShowModal(!showModal)}
         />
+        <GoalInput
+          submit={addGoalHandler}
+          visible={showModal}
+          closeModal={() => setShowModal(!showModal)}
+        />
+        <View style={styles.goalsContainer}>
+          <FlatList
+            data={goals}
+            keyExtractor={(itemData, index) => itemData.id}
+            renderItem={(itemData) => (
+              <GoalItem onDelete={DeleteGoal} goal={itemData.item} />
+            )}
+            alwaysBounceVertical={false}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    paddingTop: 70,
     paddingHorizontal: 16,
     flex: 1,
   },
 
   goalsContainer: {
+    marginTop: 20,
     flex: 5,
   },
 });
